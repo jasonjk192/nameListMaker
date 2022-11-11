@@ -13,6 +13,7 @@ void CharacterNameList::Update(QListView *listView)
 
 void CharacterNameList::LoadNameList(TreeItem* treeCharacterName)
 {
+    characterNameSetList.clear();
     if(treeCharacterName->children.size()==0)
     {
         HelperFunctions::printLine("WARNING: character_names do not have any name sets", "yellow");
@@ -34,6 +35,7 @@ void CharacterNameList::LoadNameCategories(QComboBox *box)
 
 void CharacterNameList::LoadNameSets(QComboBox *box)
 {
+    box->clear();
     for(auto nameSet : characterNameSetList)
         box->addItem(nameSet.name);
 }
@@ -45,15 +47,18 @@ void CharacterNameList::LoadNameSetWeight(QLineEdit *edit)
 
 void CharacterNameList::LoadNames(int setIndex, int catIndex, QListView *listView)
 {
-    selectedNameSet = setIndex;
-    characterList->setStringList(characterNameSetList[setIndex].nameList[catIndex]);
-    Update(listView);
+    if(setIndex>=0 && catIndex>=0)
+    {
+        selectedNameSet = setIndex;
+        characterList->setStringList(characterNameSetList[setIndex].nameList[catIndex]);
+        Update(listView);
+    }
 }
 
 CharacterNameSet CharacterNameList::GenerateCharacterNameSet(TreeItem *treeNameSet)
 {
     CharacterNameSet set;
-    set.weight = (*treeNameSet)["weight"]->key.toInt();
+    set.weight = (*treeNameSet)["weight"].children[0]->key.replace("\"","").toInt();
     set.name = treeNameSet->key;
     for(int idx = 0;idx<treeNameSet->children.size();idx++)
     {

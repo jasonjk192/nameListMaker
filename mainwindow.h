@@ -5,6 +5,8 @@
 #include <QStringListModel>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QFormLayout>
+#include <QMouseEvent>
 
 #include "shipnamelist.h"
 #include "localkeylist.h"
@@ -12,6 +14,10 @@
 #include "armynamelist.h"
 #include "planetnamelist.h"
 #include "characternamelist.h"
+#include "savedatafiles.h"
+#include "loaddatafiles.h"
+#include "inputnamesdialog.h"
+#include "name_list_defaults.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,6 +32,7 @@ public:
     ~MainWindow();
 
 private:
+    void ResetTree();
     void InitLocalKeyList();
     void InitShipNameList();
     void InitFleetNameList();
@@ -33,9 +40,13 @@ private:
     void InitPlanetNameList();
     void InitCharacterNameList();
 
+    void UpdateKeys(std::vector<QString> keys, TreeItem* node, QListView* listView);
+
     // Loads in file data and dump it all into a string
     bool LoadLocalKeyFile(QString* filePath);
     bool LoadNameListFile(QString* filePath);
+
+    void mousePressEvent(QMouseEvent *event);
 
 private slots:
     void on_comboBox_ship_categories_currentIndexChanged(int index);
@@ -55,6 +66,14 @@ private slots:
     void on_actionOpen_Name_List_triggered();
 
     void on_actionOpen_Localization_triggered();
+
+    void on_pushButton_clicked();
+
+    void on_actionName_triggered();
+
+    void on_actionCreate_New_Name_List_triggered();
+
+    void on_actionSave_As_triggered();
 
 private:
     Ui::MainWindow *ui;

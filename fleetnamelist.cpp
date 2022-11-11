@@ -15,6 +15,7 @@ void FleetNameList::LoadNameList(TreeItem* treeFleetName)
 {
     //randomNameStringList.append(HelperFunctions::CreateStringList(&randomNameSectionString));
     //sequentialNameStringList.append(HelperFunctions::CreateStringList(&sequentialNameSectionString));
+    fleetNameStringList.clear();
     if(treeFleetName->children.size()==0)
     {
         HelperFunctions::printLine("WARNING: fleet_names do not have any categories", "yellow");
@@ -34,12 +35,16 @@ void FleetNameList::LoadNameList(TreeItem* treeFleetName)
 
 void FleetNameList::LoadNameCategories(QComboBox *box)
 {
+    box->clear();
     for(auto cat : name_categories)
         box->addItem(cat);
 }
 
 void FleetNameList::LoadNames(int index, QListView *listView)
 {
-    fleetList->setStringList(fleetNameStringList[index]);
-    Update(listView);
+    if(index>=0)
+    {
+        fleetList->setStringList(fleetNameStringList[index]);
+        Update(listView);
+    }
 }

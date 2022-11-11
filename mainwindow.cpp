@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "loaddatafiles.h"
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -15,43 +13,62 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::ResetTree()
+{
+    tree.root.children.clear();
+    tree.root.key = "";
+}
+
 ////////////////////////////////
 /// Initialize all the forms ///
 ////////////////////////////////
 
 void MainWindow::InitShipNameList()
 {
-    shipNameList.LoadNameList(tree.root["ship_names"]);
+    shipNameList.LoadNameList(&tree.root["ship_names"]);
     shipNameList.LoadCategories(ui->comboBox_ship_categories);
     shipNameList.Update(ui->listView_ship);
 }
 
 void MainWindow::InitFleetNameList()
 {
-    fleetNameList.LoadNameList(tree.root["fleet_names"]);
+    fleetNameList.LoadNameList(&tree.root["fleet_names"]);
     fleetNameList.LoadNameCategories(ui->comboBox_fleet_name_categories);
     fleetNameList.Update(ui->listView_fleet);
 }
 
 void MainWindow::InitArmyNameList()
 {
-    armyNameList.LoadNameList(tree.root["army_names"]);
+    armyNameList.LoadNameList(&tree.root["army_names"]);
     armyNameList.LoadCategories(ui->comboBox_army_name_categories);
     armyNameList.Update(ui->listView_army);
 }
 
 void MainWindow::InitPlanetNameList()
 {
-    planetNameList.LoadNameList(tree.root["planet_names"]);
+    planetNameList.LoadNameList(&tree.root["planet_names"]);
     planetNameList.LoadCategories(ui->comboBox_planet_categories);
     planetNameList.Update(ui->listView_planet);
 }
 
 void MainWindow::InitCharacterNameList()
 {
-    characterNameList.LoadNameList(tree.root["character_names"]);
+    characterNameList.LoadNameList(&tree.root["character_names"]);
     characterNameList.LoadNameSets(ui->comboBox_character_name_set);
     characterNameList.Update(ui->listView_character);
+}
+
+void MainWindow::UpdateKeys(std::vector<QString> keys, TreeItem *node, QListView *listView)
+{
+    QStringListModel* model = (QStringListModel*)listView->model();
+    QStringList list = model->stringList();
+    for(auto key:keys)
+    {
+        node->InsertKey(key);
+        list.append(key);
+    }
+    model->setStringList(list);
+    listView->setModel(model);
 }
 
 void MainWindow::InitLocalKeyList()
@@ -88,6 +105,16 @@ bool MainWindow::LoadNameListFile(QString *filePath)
         return true;
     }
     return false;
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button()==Qt::RightButton)
+    {
+        QMenu *menu=new QMenu(this);
+        menu->addAction(QString("Add Names"), this,SLOT(on_pushButton_clicked()));
+        menu->exec(event->globalPos());
+    }
 }
 
 ////////////////////////////////
@@ -149,6 +176,8 @@ void MainWindow::on_comboBox_army_name_type_currentIndexChanged(int index)
 void MainWindow::on_actionOpen_Name_List_triggered()
 {
     //QString filepath_nameList = stellarisPath+"/common/name_lists/HUMAN1.txt";
+    ResetTree();
+
     QString filter = tr("All files (*.*);;TXT (*.txt)");
     QString filepath_nameList = QFileDialog::getOpenFileName(this, tr("Open File"), tr(""), filter);
     if(filepath_nameList.isEmpty())
@@ -188,5 +217,69 @@ void MainWindow::on_actionOpen_Localization_triggered()
         errorMessageBox.exec();
     }
     InitLocalKeyList();
+}
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    InputNamesDialog dialog;
+    if(dialog.exec()==QDialog::Rejected)
+        return;
+    std::vector<QString> keys;
+    for(auto name: dialog.nameList)
+        keys.push_back(name);
+    TreeItem* currentNode = nullptr;
+    QListView* listview;
+    int idx = ui->tabWidget_name->currentIndex();
+    switch(idx)
+    {
+        case 1:
+                currentNode = &tree.root["ship_names"][ui->comboBox_ship_categories->currentIndex()];
+                listview = ui->listView_ship;
+                break;
+        case 2:
+                currentNode = &tree.root["fleet_names"]; listview = ui->listView_fleet;
+                break;
+        case 3:
+                currentNode = &tree.root["army_names"][ui->comboBox_army_name_categories->currentIndex()][ui->comboBox_army_name_type->currentIndex()];
+                listview = ui->listView_army;
+                break;
+        case 4:
+                currentNode = &tree.root["planet_names"][ui->comboBox_planet_categories->currentIndex()]["names"];
+                listview = ui->listView_planet;
+                break;
+        case 5:
+                currentNode = &tree.root["character_names"][ui->comboBox_character_name_set->currentIndex()][ui->comboBox_character_name_categories->currentIndex()];
+                listview = ui->listView_character;
+                break;
+    default: break;
+    }
+    if(currentNode!=nullptr)
+        UpdateKeys(keys, currentNode, listview);
+}
+
+
+void MainWindow::on_actionName_triggered()
+{
+    on_pushButton_clicked();
+}
+
+
+void MainWindow::on_actionCreate_New_Name_List_triggered()
+{
+    NameListDefaults defaults;
+    ResetTree();
+    tree.root = defaults.GenerateDefaultTree();
+    InitShipNameList();
+    InitFleetNameList();
+    InitArmyNameList();
+    InitPlanetNameList();
+    InitCharacterNameList();
+}
+
+
+void MainWindow::on_actionSave_As_triggered()
+{
+    SaveDataFiles::SaveNameList(&tree.root,"");
 }
 

@@ -13,6 +13,7 @@ void ArmyNameList::Update(QListView *listView)
 
 void ArmyNameList::LoadNameList(TreeItem* treeArmyName)
 {
+    armyNameSetList.clear();
     if(treeArmyName->children.size()==0)
     {
         HelperFunctions::printLine("WARNING: army_names do not have any categories", "yellow");
@@ -28,6 +29,7 @@ void ArmyNameList::LoadNameList(TreeItem* treeArmyName)
 
 void ArmyNameList::LoadCategories(QComboBox *box)
 {
+    box->clear();
     for(auto cat : armyNameSetList)
         box->addItem(cat.armyCategoryName);
 }
@@ -41,9 +43,12 @@ void ArmyNameList::LoadCategoryNames(QComboBox *box)
 
 void ArmyNameList::LoadNames(int catIndex, int typeIndex, QListView *listView)
 {
-    selectedCategory = catIndex;
-    armyList->setStringList(armyNameSetList[catIndex].nameList[typeIndex]);
-    Update(listView);
+    if(catIndex>=0 && typeIndex>=0)
+    {
+        selectedCategory = catIndex;
+        armyList->setStringList(armyNameSetList[catIndex].nameList[typeIndex]);
+        Update(listView);
+    }
 }
 
 ArmyNameSet ArmyNameList::GenerateArmyNameSet(TreeItem *treeNameSet)

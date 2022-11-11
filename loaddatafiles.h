@@ -127,20 +127,20 @@ public:
     }
 
     // Ease of access of children of current node using their key
-    TreeItem* operator[](QString k)
+    TreeItem& operator[](QString k)
     {
         for(auto child:children)
             if(child->key==k)
-                return child;
-        return nullptr;
+                return *child;
+        HelperFunctions::printLine("ERROR: Key is non-existent. No TreeItem returned.","red");
     }
 
-    // Returns child of current node at the given index, else returns null pointer
-    TreeItem* operator[](int index)
+    // Returns child of current node at the given index
+    TreeItem& operator[](int index)
     {
         if(index>=0 && index<children.size())
-            return children[index];
-        return nullptr;
+            return *children[index];
+        HelperFunctions::printLine("ERROR: Key is non-existent. No TreeItem returned.","red");
     }
 
 };

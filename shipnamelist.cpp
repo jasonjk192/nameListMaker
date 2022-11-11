@@ -12,6 +12,7 @@ void ShipNameList::Update(QListView* listView)
 
 void ShipNameList::LoadNameList(TreeItem* treeShipName)
 {
+    shipCategoryBodyList.clear();
     if(treeShipName->children.size()==0)
     {
         HelperFunctions::printLine("WARNING: ship_names do not have any categories", "yellow");
@@ -31,12 +32,16 @@ void ShipNameList::LoadNameList(TreeItem* treeShipName)
 
 void ShipNameList::LoadCategories(QComboBox* box)
 {
+    box->clear();
     for(auto cat : categories)
         box->addItem(cat);
 }
 
 void ShipNameList::LoadNames(int index, QListView *listView)
 {
-    shipList->setStringList(shipCategoryBodyList[index]);
-    Update(listView);
+    if(index>=0)
+    {
+        shipList->setStringList(shipCategoryBodyList[index]);
+        Update(listView);
+    }
 }

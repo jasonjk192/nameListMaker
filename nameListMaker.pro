@@ -13,11 +13,13 @@ SOURCES += \
     armynamelist.cpp \
     characternamelist.cpp \
     fleetnamelist.cpp \
+    inputnamesdialog.cpp \
     loaddatafiles.cpp \
     localkeylist.cpp \
     main.cpp \
     mainwindow.cpp \
     planetnamelist.cpp \
+    savedatafiles.cpp \
     shipnamelist.cpp
 
 HEADERS += \
@@ -25,13 +27,17 @@ HEADERS += \
     characternamelist.h \
     fleetnamelist.h \
     helperFunctions.h \
+    inputnamesdialog.h \
     loaddatafiles.h \
     localkeylist.h \
     mainwindow.h \
+    name_list_defaults.h \
     planetnamelist.h \
+    savedatafiles.h \
     shipnamelist.h
 
 FORMS += \
+    inputnamesdialog.ui \
     mainwindow.ui
 
 # Default rules for deployment.

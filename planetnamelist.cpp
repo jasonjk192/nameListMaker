@@ -13,6 +13,7 @@ void PlanetNameList::Update(QListView *listView)
 
 void PlanetNameList::LoadNameList(TreeItem* treePlanetName)
 {
+    planetCategoryBodyList.clear();
     if(treePlanetName->children.size()==0)
     {
         HelperFunctions::printLine("WARNING: planet_names do not have any categories", "yellow");
@@ -32,12 +33,16 @@ void PlanetNameList::LoadNameList(TreeItem* treePlanetName)
 
 void PlanetNameList::LoadCategories(QComboBox *box)
 {
+    box->clear();
     for(auto cat : categories)
         box->addItem(cat);
 }
 
 void PlanetNameList::LoadNames(int index, QListView *listView)
 {
-    planetList->setStringList(planetCategoryBodyList[index]);
-    Update(listView);
+    if(index>=0)
+    {
+        planetList->setStringList(planetCategoryBodyList[index]);
+        Update(listView);
+    }
 }
