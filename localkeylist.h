@@ -17,9 +17,21 @@ public:
     explicit LocalKeyList(QWidget *parent = nullptr);
     void Update(QListView* listView);
     void LoadKeys(LoadDict* dict);
+    void GenerateKeys(LoadDict* dict, TreeItem* root);
+
+private:
+    QString ConvertValueToKey(QString* value, LoadDict* dict);
+    void CheckKey(TreeItem* root, LoadDict *dict, int depth);
+    bool checkIfKeyIsCategory(QString k);
+    bool checkIfValueIsSequential(QString* value);
+
+public:
+    bool toggleKeys = true;
 
 private:
     QStringListModel* keyList;
+    QString keyPrefix;
+    bool debugToConsole = false;
 
 signals:
 

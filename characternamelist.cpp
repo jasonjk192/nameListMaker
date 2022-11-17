@@ -16,7 +16,7 @@ void CharacterNameList::LoadNameList(TreeItem* treeCharacterName)
     characterNameSetList.clear();
     if(treeCharacterName->children.size()==0)
     {
-        HelperFunctions::printLine("WARNING: character_names do not have any name sets", "yellow");
+        HelperFunctions::printLine("WARNING: character_names do not have any name sets", HelperFunctions::printOption::YELLOW);
         return;
     }
     for(auto characterSet:treeCharacterName->children)

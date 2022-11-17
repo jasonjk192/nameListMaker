@@ -10,6 +10,10 @@
 class HelperFunctions
 {
 public:
+    enum class printOption {DEFAULT, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, LIGHTGRAY, BOLD, UNDERLINE,
+                            STRONG_RED, STRONG_GREEN, STRONG_YELLOW, STRONG_BLUE, STRONG_MAGENTA, STRONG_CYAN, STRONG_LIGHTGRAY};
+
+public:
 
     // Creates a string list from body of data (redundant since tree is now used)
     static QStringList CreateStringList(QString *sectionBody)
@@ -44,31 +48,45 @@ public:
     }
 
     // For debugging purpose (Console readability)
-    static void printLine(QString str, QString otherText, QString color)
+    static void printLine(QString str, QString otherText, printOption color = printOption::DEFAULT)
     {
-        if(color.toLower().compare("red")==0) qDebug() << "\033[31m" << str << "\033[0m" << otherText;
-        else if(color.toLower().compare("green")==0) qDebug() << "\033[32m" << str << "\033[0m" << otherText;
-        else if(color.toLower().compare("yellow")==0) qDebug() << "\033[33m" << str << "\033[0m" << otherText;
-        else if(color.toLower().compare("blue")==0) qDebug() << "\033[34m" << str << "\033[0m" << otherText;
-        else if(color.toLower().compare("magenta")==0) qDebug() << "\033[35m" << str << "\033[0m" << otherText;
-        else if(color.toLower().compare("cyan")==0) qDebug() << "\033[36m" << str << "\033[0m" << otherText;
-        else if(color.toLower().compare("light gray")==0) qDebug() << "\033[37m" << str << "\033[0m" << otherText;
-        else if(color.toLower().compare("bold")==0) qDebug() << "\033[1m" << str << "\033[0m" << otherText;
-        else if(color.toLower().compare("underline")==0) qDebug() << "\033[24m" << str << "\033[0m" << otherText;
+        if(color == printOption::RED) qDebug() << "\033[31m" << str << "\033[0m" << otherText;
+        else if(color == printOption::GREEN) qDebug() << "\033[32m" << str << "\033[0m" << otherText;
+        else if(color == printOption::YELLOW) qDebug() << "\033[33m" << str << "\033[0m" << otherText;
+        else if(color == printOption::BLUE) qDebug() << "\033[34m" << str << "\033[0m" << otherText;
+        else if(color == printOption::MAGENTA) qDebug() << "\033[35m" << str << "\033[0m" << otherText;
+        else if(color == printOption::CYAN) qDebug() << "\033[36m" << str << "\033[0m" << otherText;
+        else if(color == printOption::LIGHTGRAY) qDebug() << "\033[37m" << str << "\033[0m" << otherText;
+        else if(color == printOption::BOLD) qDebug() << "\033[1m" << str << "\033[0m" << otherText;
+        else if(color == printOption::UNDERLINE) qDebug() << "\033[24m" << str << "\033[0m" << otherText;
+        else if(color == printOption::STRONG_RED) qDebug() << "\033[91m" << str << "\033[0m" << otherText;
+        else if(color == printOption::STRONG_GREEN) qDebug() << "\033[92m" << str << "\033[0m" << otherText;
+        else if(color == printOption::STRONG_YELLOW) qDebug() << "\033[93m" << str << "\033[0m" << otherText;
+        else if(color == printOption::STRONG_BLUE) qDebug() << "\033[94m" << str << "\033[0m" << otherText;
+        else if(color == printOption::STRONG_MAGENTA) qDebug() << "\033[95m" << str << "\033[0m" << otherText;
+        else if(color == printOption::STRONG_CYAN) qDebug() << "\033[96m" << str << "\033[0m" << otherText;
+        else if(color == printOption::STRONG_LIGHTGRAY) qDebug() << "\033[97m" << str << "\033[0m" << otherText;
         else qDebug() << str << otherText;
     }
 
-    static void printLine(QString str, QString color)
+    static void printLine(QString str, printOption color = printOption::DEFAULT)
     {
-        if(color.toLower().compare("red")==0) qDebug() << "\033[31m" << str << "\033[0m";
-        else if(color.toLower().compare("green")==0) qDebug() << "\033[32m" << str << "\033[0m";
-        else if(color.toLower().compare("yellow")==0) qDebug() << "\033[33m" << str << "\033[0m";
-        else if(color.toLower().compare("blue")==0) qDebug() << "\033[34m" << str << "\033[0m";
-        else if(color.toLower().compare("magenta")==0) qDebug() << "\033[35m" << str << "\033[0m";
-        else if(color.toLower().compare("cyan")==0) qDebug() << "\033[36m" << str << "\033[0m";
-        else if(color.toLower().compare("light gray")==0) qDebug() << "\033[37m" << str << "\033[0m";
-        else if(color.toLower().compare("bold")==0) qDebug() << "\033[1m" << str << "\033[0m";
-        else if(color.toLower().compare("underline")==0) qDebug() << "\033[24m" << str << "\033[0m";
+        if(color == printOption::RED) qDebug() << "\033[31m" << str << "\033[0m";
+        else if(color == printOption::GREEN) qDebug() << "\033[32m" << str << "\033[0m";
+        else if(color == printOption::YELLOW) qDebug() << "\033[33m" << str << "\033[0m";
+        else if(color == printOption::BLUE) qDebug() << "\033[34m" << str << "\033[0m";
+        else if(color == printOption::MAGENTA) qDebug() << "\033[35m" << str << "\033[0m";
+        else if(color == printOption::CYAN) qDebug() << "\033[36m" << str << "\033[0m";
+        else if(color == printOption::LIGHTGRAY) qDebug() << "\033[37m" << str << "\033[0m";
+        else if(color == printOption::BOLD) qDebug() << "\033[1m" << str << "\033[0m";
+        else if(color == printOption::UNDERLINE) qDebug() << "\033[24m" << str << "\033[0m";
+        else if(color == printOption::STRONG_RED) qDebug() << "\033[91m" << str << "\033[0m";
+        else if(color == printOption::STRONG_GREEN) qDebug() << "\033[92m" << str << "\033[0m";
+        else if(color == printOption::STRONG_YELLOW) qDebug() << "\033[93m" << str << "\033[0m";
+        else if(color == printOption::STRONG_BLUE) qDebug() << "\033[94m" << str << "\033[0m";
+        else if(color == printOption::STRONG_MAGENTA) qDebug() << "\033[95m" << str << "\033[0m";
+        else if(color == printOption::STRONG_CYAN) qDebug() << "\033[96m" << str << "\033[0m";
+        else if(color == printOption::STRONG_LIGHTGRAY) qDebug() << "\033[97m" << str << "\033[0m";
         else qDebug() << str;
     }
 

@@ -16,7 +16,7 @@ void PlanetNameList::LoadNameList(TreeItem* treePlanetName)
     planetCategoryBodyList.clear();
     if(treePlanetName->children.size()==0)
     {
-        HelperFunctions::printLine("WARNING: planet_names do not have any categories", "yellow");
+        HelperFunctions::printLine("WARNING: planet_names do not have any categories", HelperFunctions::printOption::YELLOW);
         return;
     }
     categories.clear();
@@ -24,7 +24,7 @@ void PlanetNameList::LoadNameList(TreeItem* treePlanetName)
     {
         QStringList planetClassList;
         categories.push_back(planetType->key);
-        if(planetType[0].children[0]->children.size()==0) HelperFunctions::printLine("WARNING: Planet category \'"+planetType->key+"\' has no names", "yellow");
+        if(planetType[0].children[0]->children.size()==0) HelperFunctions::printLine("WARNING: Planet category \'"+planetType->key+"\' has no names", HelperFunctions::printOption::YELLOW);
         for(auto planet:planetType[0].children[0]->children)
             planetClassList.push_back(planet->key);
         planetCategoryBodyList.push_back(planetClassList);

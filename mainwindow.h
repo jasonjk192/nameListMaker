@@ -75,6 +75,10 @@ private slots:
 
     void on_actionSave_As_triggered();
 
+    void on_actionLocalization_Keys_triggered();
+
+    void on_actionToggle_Localization_Keys_triggered(bool checked);
+
 private:
     Ui::MainWindow *ui;
     ShipNameList shipNameList;

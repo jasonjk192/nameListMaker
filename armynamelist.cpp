@@ -16,7 +16,7 @@ void ArmyNameList::LoadNameList(TreeItem* treeArmyName)
     armyNameSetList.clear();
     if(treeArmyName->children.size()==0)
     {
-        HelperFunctions::printLine("WARNING: army_names do not have any categories", "yellow");
+        HelperFunctions::printLine("WARNING: army_names do not have any categories", HelperFunctions::printOption::YELLOW);
         return;
     }
     categories.clear();

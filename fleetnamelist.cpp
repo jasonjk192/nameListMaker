@@ -18,7 +18,7 @@ void FleetNameList::LoadNameList(TreeItem* treeFleetName)
     fleetNameStringList.clear();
     if(treeFleetName->children.size()==0)
     {
-        HelperFunctions::printLine("WARNING: fleet_names do not have any categories", "yellow");
+        HelperFunctions::printLine("WARNING: fleet_names do not have any categories", HelperFunctions::printOption::YELLOW);
         return;
     }
     name_categories.clear();
@@ -26,7 +26,7 @@ void FleetNameList::LoadNameList(TreeItem* treeFleetName)
     {
         QStringList fleetNameTypeList;
         name_categories.push_back(nameType->key);
-        if(nameType->children.size()==0) HelperFunctions::printLine("WARNING: \'"+nameType->key+"\' has no names", "yellow");
+        if(nameType->children.size()==0) HelperFunctions::printLine("WARNING: \'"+nameType->key+"\' has no names", HelperFunctions::printOption::YELLOW);
         for(auto fleet:nameType->children)
             fleetNameTypeList.push_back(fleet->key);
         fleetNameStringList.push_back(fleetNameTypeList);

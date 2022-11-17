@@ -390,13 +390,21 @@
    </widget>
    <widget class="QMenu" name="menuAdd">
     <property name="title">
-     <string>Add</string>
+     <string>Generate</string>
     </property>
     <addaction name="actionName"/>
     <addaction name="actionCategories"/>
+    <addaction name="actionLocalization_Keys"/>
+   </widget>
+   <widget class="QMenu" name="menuToggle">
+    <property name="title">
+     <string>Toggle</string>
+    </property>
+    <addaction name="actionToggle_Localization_Keys"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuAdd"/>
+   <addaction name="menuToggle"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionOpen_Name_List">
@@ -442,6 +450,19 @@
   <action name="actionExit_2">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionLocalization_Keys">
+   <property name="text">
+    <string>Localization Keys</string>
+   </property>
+  </action>
+  <action name="actionToggle_Localization_Keys">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Localization: Enable Keys</string>
    </property>
   </action>
  </widget>

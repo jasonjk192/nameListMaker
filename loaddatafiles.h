@@ -95,7 +95,7 @@ public:
         if(idx<children.size())
             children.erase(children.begin()+idx);
         else
-            HelperFunctions::printLine("WARNING: Cannot remove a key that does not exist","red");
+            HelperFunctions::printLine("WARNING: Cannot remove a key that does not exist",HelperFunctions::printOption::RED);
     }
 
     // Remove the current node
@@ -123,7 +123,7 @@ public:
             parent->RemoveChildKey(k);
         }
         else
-            HelperFunctions::printLine("WARNING: Key is non-existent in children","red");
+            HelperFunctions::printLine("WARNING: Key is non-existent in children",HelperFunctions::printOption::RED);
     }
 
     // Ease of access of children of current node using their key
@@ -132,7 +132,7 @@ public:
         for(auto child:children)
             if(child->key==k)
                 return *child;
-        HelperFunctions::printLine("ERROR: Key is non-existent. No TreeItem returned.","red");
+        HelperFunctions::printLine("ERROR: Key is non-existent. No TreeItem returned.",HelperFunctions::printOption::RED);
     }
 
     // Returns child of current node at the given index
@@ -140,7 +140,7 @@ public:
     {
         if(index>=0 && index<children.size())
             return *children[index];
-        HelperFunctions::printLine("ERROR: Key is non-existent. No TreeItem returned.","red");
+        HelperFunctions::printLine("ERROR: Key is non-existent. No TreeItem returned.",HelperFunctions::printOption::RED);
     }
 
 };

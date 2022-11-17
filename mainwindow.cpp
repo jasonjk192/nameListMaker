@@ -281,5 +281,25 @@ void MainWindow::on_actionCreate_New_Name_List_triggered()
 void MainWindow::on_actionSave_As_triggered()
 {
     SaveDataFiles::SaveNameList(&tree.root,"");
+    SaveDataFiles::SaveLocalization(&dict,"");
+}
+
+
+void MainWindow::on_actionLocalization_Keys_triggered()
+{
+    localKeyList.GenerateKeys(&dict, &tree.root);
+    InitLocalKeyList();
+    InitShipNameList();
+    InitFleetNameList();
+    InitArmyNameList();
+    InitPlanetNameList();
+    InitCharacterNameList();
+}
+
+
+void MainWindow::on_actionToggle_Localization_Keys_triggered(bool checked)
+{
+    localKeyList.toggleKeys = checked;
+    InitLocalKeyList();
 }
 

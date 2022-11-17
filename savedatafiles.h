@@ -36,7 +36,7 @@ private:
         {
             if(checkIfKeyIsCategory(root->key))
             {
-                HelperFunctions::printLine(root->key,"red");
+                HelperFunctions::printLine(root->key,HelperFunctions::printOption::RED);
                 root->RemoveKey();
             }
 
@@ -47,7 +47,7 @@ private:
                 PruneTree(root->children[idx]);
             if(root->children.size()==0)
             {
-                HelperFunctions::printLine(root->key,"magenta");
+                HelperFunctions::printLine(root->key,HelperFunctions::printOption::MAGENTA);
             }
         }
     }
@@ -56,28 +56,38 @@ private:
     {
         if(root->children.size()==0)
         {
-            if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key,"cyan");
+
             if(checkIfKeyIsCategory(root->key))
-                nameListString.append(HelperFunctions::generateSpace(depth)+root->key+"\r\n");
+            {
+                if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key+" = {}",HelperFunctions::printOption::STRONG_CYAN);
+                nameListString.append(HelperFunctions::generateSpace(depth)+root->key+" = {}\r\n");
+            }
+
             else
-                nameListString.append(root->key+"\r\n");
+            {
+                if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key,HelperFunctions::printOption::CYAN);
+                if(root->parent->children.size()==1)
+                    nameListString.append(root->key+"\r\n");
+                else
+                    nameListString.append(HelperFunctions::generateSpace(depth)+root->key+"\r\n");
+            }
         }
 
         else if(root->children.size()>1)
         {
-            if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key + "= {","green");
+            if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key + "= {",HelperFunctions::printOption::GREEN);
             nameListString.append(HelperFunctions::generateSpace(depth)+root->key+ " = {\r\n");
         }
         else
         {
             if(root->children[0]->children.size()>0)
             {
-                if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key + "= {","blue");
+                if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key + "= {",HelperFunctions::printOption::BLUE);
                 nameListString.append(HelperFunctions::generateSpace(depth)+root->key+ " = {\r\n");
             }
             else
             {
-                if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key + "=","yellow");
+                if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key + "=",HelperFunctions::printOption::YELLOW);
                 nameListString.append(HelperFunctions::generateSpace(depth)+root->key+ " = ");
             }
         }
@@ -89,14 +99,14 @@ private:
             }
         if(root->children.size()>1)
         {
-            if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+"}","green");
+            if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+"}",HelperFunctions::printOption::GREEN);
             nameListString.append(HelperFunctions::generateSpace(depth)+ "}\r\n");
         }
         else if(root->children.size()==1)
         {
             if(root->children[0]->children.size()>0)
             {
-                if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+"}","blue");
+                if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+"}",HelperFunctions::printOption::BLUE);
                 nameListString.append(HelperFunctions::generateSpace(depth)+ "}\r\n");
             }
         }
@@ -109,11 +119,24 @@ public:
     {
         SaveDataFiles sdf;
         sdf.SaveKey(root,0);
-        QFile file(fileName);
+        QFile file("E:/db/test.txt");
         if (file.open(QIODevice::ReadWrite))
         {
             QTextStream stream(&file);
             stream << sdf.nameListString << endl;
+        }
+        file.close();
+    }
+    static void SaveLocalization(LoadDict *dict, QString fileName)
+    {
+        QString localListString = "l_english:\r\n";
+        for(auto k:dict->keyPair)
+            localListString.append(k.first+":0 "+"\""+k.second+"\"\r\n");
+        QFile file("E:/db/local_test.yml");
+        if (file.open(QIODevice::ReadWrite))
+        {
+            QTextStream stream(&file);
+            stream << localListString << endl;
         }
         file.close();
     }

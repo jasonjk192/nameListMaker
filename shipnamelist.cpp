@@ -15,7 +15,7 @@ void ShipNameList::LoadNameList(TreeItem* treeShipName)
     shipCategoryBodyList.clear();
     if(treeShipName->children.size()==0)
     {
-        HelperFunctions::printLine("WARNING: ship_names do not have any categories", "yellow");
+        HelperFunctions::printLine("WARNING: ship_names do not have any categories", HelperFunctions::printOption::YELLOW);
         return;
     }
     categories.clear();
@@ -23,7 +23,7 @@ void ShipNameList::LoadNameList(TreeItem* treeShipName)
     {
         QStringList shipClassList;
         categories.push_back(shipType->key);
-        if(shipType->children.size()==0) HelperFunctions::printLine("WARNING: ship category\'"+shipType->key+"\' has no names", "yellow");
+        if(shipType->children.size()==0) HelperFunctions::printLine("WARNING: ship category\'"+shipType->key+"\' has no names", HelperFunctions::printOption::YELLOW);
         for(auto ship:shipType->children)
             shipClassList.push_back(ship->key);
         shipCategoryBodyList.push_back(shipClassList);

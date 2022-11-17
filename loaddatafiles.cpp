@@ -41,15 +41,15 @@ bool LoadTree::LoadData(QString* nameListFileString)
                 {
                     currentNode = root.InsertKey(word,keys.back());
                     keys.push_back(word);
-                    if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+word,"green");
+                    if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+word,HelperFunctions::printOption::GREEN);
                 }
                 else if(checkIfWordValue(nameListFileString,idx))
                 {
                     root.InsertKey(word,keys.back(),currentNode);
-                    if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+word,"cyan");
+                    if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+word,HelperFunctions::printOption::CYAN);
                     if(isSingularValue)
                     {
-                        if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+keys.back(),"red");
+                        if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+keys.back(),HelperFunctions::printOption::RED);
                         depth--;
                         isSingularValue = false;
                         keys.pop_back();
@@ -60,7 +60,7 @@ bool LoadTree::LoadData(QString* nameListFileString)
         }
         else if(c=='{')
         {
-            if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+keys.back(),"yellow");
+            if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+keys.back(),HelperFunctions::printOption::YELLOW);
             ++depth;
         }
         else if(c=='=')
@@ -79,14 +79,14 @@ bool LoadTree::LoadData(QString* nameListFileString)
         }
         else if(c=='}')
         {
-            if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+keys.back(),"red");
+            if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+keys.back(),HelperFunctions::printOption::RED);
             keys.pop_back();
             --depth;
         }
     }
     if(keys.size()>1)
     {
-        HelperFunctions::printLine("Error in reading data", "red");
+        HelperFunctions::printLine("Error in reading data", HelperFunctions::printOption::RED);
         root = TreeItem();
         return false;
     }
@@ -141,6 +141,6 @@ bool LoadDict::LoadData(QString *localListFileString)
     }
     if(debugToConsole)
         for(auto k:keyPair)
-            HelperFunctions::printLine(k.first,k.second,"green");
+            HelperFunctions::printLine(k.first,k.second,HelperFunctions::printOption::GREEN);
     return true;
 }
