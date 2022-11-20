@@ -6,6 +6,14 @@ PlanetNameList::PlanetNameList(QWidget *parent)
     planetList = new QStringListModel(this);
 }
 
+void PlanetNameList::Clear(QListView *listView, QComboBox *box)
+{
+    QStringList st;
+    planetList->setStringList(st);
+    listView->setModel(planetList);
+    box->clear();
+}
+
 void PlanetNameList::Update(QListView *listView)
 {
     listView->setModel(planetList);

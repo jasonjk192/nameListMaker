@@ -11,6 +11,14 @@ void FleetNameList::Update(QListView *listView)
     listView->setModel(fleetList);
 }
 
+void FleetNameList::Clear(QListView *listView, QComboBox *box)
+{
+    QStringList st;
+    fleetList->setStringList(st);
+    listView->setModel(fleetList);
+    box->clear();
+}
+
 void FleetNameList::LoadNameList(TreeItem* treeFleetName)
 {
     //randomNameStringList.append(HelperFunctions::CreateStringList(&randomNameSectionString));
@@ -47,4 +55,28 @@ void FleetNameList::LoadNames(int index, QListView *listView)
         fleetList->setStringList(fleetNameStringList[index]);
         Update(listView);
     }
+}
+
+void FleetNameList::AddCategory(QString name, TreeItem *treeFleetName)
+{
+    treeFleetName->InsertKey(name);
+    fleetNameStringList.push_back(QStringList());
+    name_categories.push_back(name);
+}
+
+void FleetNameList::EditNameList(int index, std::vector<QString> *names, TreeItem *treeFleetName)
+{
+    QString cat = name_categories[index];
+    for(auto name:*names)
+    {
+        fleetNameStringList[index].push_back(name);
+        (*treeFleetName)[cat].InsertKey(name);
+    }
+}
+
+void FleetNameList::EditName(int index, int nameIndex, QString name, TreeItem *treeFleetName)
+{
+    QString cat = name_categories[index];
+    (*treeFleetName)[cat][nameIndex].key = name;
+    fleetNameStringList[index][nameIndex] = name;
 }

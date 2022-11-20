@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->listView_keys->setContextMenuPolicy(Qt::DefaultContextMenu);
 }
 
 MainWindow::~MainWindow()
@@ -13,10 +14,29 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+//////////////
+/// Resets ///
+//////////////
+
 void MainWindow::ResetTree()
 {
     tree.root.children.clear();
     tree.root.key = "";
+}
+
+void MainWindow::ResetDict()
+{
+    dict.keyPair.clear();
+}
+
+void MainWindow::ResetNameList()
+{
+    localKeyList.Clear(ui->listView_keys);
+    shipNameList.Clear(ui->listView_ship, ui->comboBox_ship_categories);
+    fleetNameList.Clear(ui->listView_fleet, ui->comboBox_fleet_name_categories);
+    armyNameList.Clear(ui->listView_army, ui->comboBox_army_name_categories, ui->comboBox_army_name_type);
+    planetNameList.Clear(ui->listView_planet, ui->comboBox_planet_categories);
+    characterNameList.Clear(ui->listView_character, ui->comboBox_character_name_categories, ui->comboBox_character_name_set, ui->lineEdit_character_name_set_weight);
 }
 
 ////////////////////////////////
@@ -55,6 +75,7 @@ void MainWindow::InitCharacterNameList()
 {
     characterNameList.LoadNameList(&tree.root["character_names"]);
     characterNameList.LoadNameSets(ui->comboBox_character_name_set);
+    characterNameList.LoadNameSetWeight(ui->lineEdit_character_name_set_weight);
     characterNameList.Update(ui->listView_character);
 }
 
@@ -109,6 +130,7 @@ bool MainWindow::LoadNameListFile(QString *filePath)
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
+
     if (event->button()==Qt::RightButton)
     {
         QMenu *menu=new QMenu(this);
@@ -280,8 +302,14 @@ void MainWindow::on_actionCreate_New_Name_List_triggered()
 
 void MainWindow::on_actionSave_As_triggered()
 {
-    SaveDataFiles::SaveNameList(&tree.root,"");
-    SaveDataFiles::SaveLocalization(&dict,"");
+    if(!tree.root.children.empty())
+        SaveDataFiles::SaveNameList(&tree.root,"");
+    else
+        HelperFunctions::printLine("No data is available", HelperFunctions::printOption::YELLOW);
+    if(dict.keyPair.size()>0)
+        SaveDataFiles::SaveLocalization(&dict,"");
+    else
+        HelperFunctions::printLine("No localization is available/generated", HelperFunctions::printOption::YELLOW);
 }
 
 
@@ -303,3 +331,188 @@ void MainWindow::on_actionToggle_Localization_Keys_triggered(bool checked)
     InitLocalKeyList();
 }
 
+
+void MainWindow::on_pushButton_planet_add_category_clicked()
+{
+    QString category = QInputDialog::getText(this,"New Category","name");
+    if(category=="")
+        return;
+    TreeItem* newcat = tree.root["planet_names"].InsertKey(category);
+    newcat->InsertKey("names");
+    InitPlanetNameList();
+}
+
+
+void MainWindow::on_actionExit_triggered()
+{
+    QApplication::exit();
+}
+
+
+void MainWindow::on_actionCloseNameList_triggered()
+{
+    ResetTree();
+    ResetDict();
+    ResetNameList();
+}
+
+
+void MainWindow::on_lineEdit_character_name_set_weight_textEdited(const QString &arg1)
+{
+    bool isNum = true;
+    int weight = arg1.toInt(&isNum, 10);
+    if(!isNum)
+    {
+        ui->lineEdit_character_name_set_weight->setText(tree.root["character_names"][ui->comboBox_character_name_set->currentIndex()]["weight"][0].key);
+        return;
+    }
+    tree.root["character_names"][ui->comboBox_character_name_set->currentIndex()]["weight"][0].key = arg1;
+    characterNameList.EditNameSetWeight(ui->comboBox_character_name_set->currentIndex(), weight);
+}
+
+
+void MainWindow::on_pushButton_character_add_name_set_clicked()
+{
+    QString nameSet = QInputDialog::getText(this,"New Name Set","name");
+    if(nameSet=="")
+        return;
+    characterNameList.AddNameSet(nameSet, &tree.root["character_names"]);
+    characterNameList.LoadNameSets(ui->comboBox_character_name_set);
+}
+
+
+void MainWindow::on_pushButton_character_add_name_category_clicked()
+{
+    QString nameCat = QInputDialog::getText(this,"New Name Category","name");
+    if(nameCat=="")
+        return;
+    characterNameList.AddNameCategory(nameCat, ui->comboBox_character_name_set->currentIndex(), &tree.root["character_names"]);
+    characterNameList.LoadNameCategories(ui->comboBox_character_name_categories);
+}
+
+void MainWindow::on_pushButton_character_add_names_clicked()
+{
+    InputNamesDialog dialog;
+    if(dialog.exec()==QDialog::Rejected)
+        return;
+    characterNameList.EditNameList(ui->comboBox_character_name_set->currentIndex(), ui->comboBox_character_name_categories->currentIndex(),
+                                   &dialog.nameList, &tree.root["character_names"]);
+    characterNameList.LoadNames(ui->comboBox_character_name_set->currentIndex(), ui->comboBox_character_name_categories->currentIndex(),
+                                ui->listView_character);
+}
+
+
+void MainWindow::on_listView_character_doubleClicked(const QModelIndex &index)
+{
+    QString newName = QInputDialog::getText(this,"New Name","name");
+    if(newName=="")
+        return;
+    characterNameList.EditName(ui->comboBox_character_name_set->currentIndex(), ui->comboBox_character_name_categories->currentIndex(),
+                               index.row(), newName, &tree.root["character_names"]);
+    characterNameList.LoadNames(ui->comboBox_character_name_set->currentIndex(), ui->comboBox_character_name_categories->currentIndex(),
+                                ui->listView_character);
+}
+
+void MainWindow::on_pushButton_army_add_category_clicked()
+{
+    QString newCat = QInputDialog::getText(this,"New Category","name");
+    if(newCat=="")
+        return;
+    armyNameList.AddCategory(newCat, &tree.root["army_names"]);
+    armyNameList.LoadCategories(ui->comboBox_army_name_categories);
+}
+
+void MainWindow::on_pushButton_army_add_type_clicked()
+{
+    QString newType = QInputDialog::getText(this,"New Type","name");
+    if(newType=="")
+        return;
+    armyNameList.AddType(newType, ui->comboBox_army_name_categories->currentIndex(), &tree.root["army_names"]);
+    armyNameList.LoadCategoryNames(ui->comboBox_army_name_type);
+}
+
+void MainWindow::on_pushButton_army_add_names_clicked()
+{
+    InputNamesDialog dialog;
+    if(dialog.exec()==QDialog::Rejected)
+        return;
+    armyNameList.EditNameList(ui->comboBox_army_name_categories->currentIndex(), ui->comboBox_army_name_type->currentIndex(),
+                              &dialog.nameList, &tree.root["army_names"]);
+    armyNameList.LoadNames(ui->comboBox_army_name_categories->currentIndex(), ui->comboBox_army_name_type->currentIndex(),
+                           ui->listView_army);
+}
+
+void MainWindow::on_listView_army_doubleClicked(const QModelIndex &index)
+{
+    QString newName = QInputDialog::getText(this,"New Name","name");
+    if(newName=="")
+        return;
+    armyNameList.EditName(ui->comboBox_army_name_categories->currentIndex(), ui->comboBox_army_name_type->currentIndex(),
+                               index.row(), newName, &tree.root["army_names"]);
+    armyNameList.LoadNames(ui->comboBox_army_name_categories->currentIndex(), ui->comboBox_army_name_type->currentIndex(),
+                           ui->listView_army);
+}
+
+
+void MainWindow::on_pushButton_fleet_add_category_clicked()
+{
+    QString newCat = QInputDialog::getText(this,"New Category","name");
+    if(newCat=="")
+        return;
+    fleetNameList.AddCategory(newCat, &tree.root["fleet_names"]);
+    fleetNameList.LoadNameCategories(ui->comboBox_fleet_name_categories);
+}
+
+
+void MainWindow::on_pushButton_fleet_add_names_clicked()
+{
+    InputNamesDialog dialog;
+    if(dialog.exec()==QDialog::Rejected)
+        return;
+    fleetNameList.EditNameList(ui->comboBox_fleet_name_categories->currentIndex(),
+                               &dialog.nameList, &tree.root["fleet_names"]);
+    fleetNameList.LoadNames(ui->comboBox_fleet_name_categories->currentIndex(), ui->listView_fleet);
+}
+
+
+void MainWindow::on_listView_fleet_doubleClicked(const QModelIndex &index)
+{
+    QString newName = QInputDialog::getText(this,"New Name","name");
+    if(newName=="")
+        return;
+    fleetNameList.EditName(ui->comboBox_fleet_name_categories->currentIndex(),
+                           index.row(), newName, &tree.root["fleet_names"]);
+    fleetNameList.LoadNames(ui->comboBox_fleet_name_categories->currentIndex(), ui->listView_fleet);
+}
+
+
+void MainWindow::on_pushButton_ship_add_category_clicked()
+{
+    QString newCat = QInputDialog::getText(this,"New Category","name");
+    if(newCat=="")
+        return;
+    shipNameList.AddCategory(newCat, &tree.root["ship_names"]);
+    shipNameList.LoadCategories(ui->comboBox_ship_categories);
+}
+
+
+void MainWindow::on_pushButton_ship_add_names_clicked()
+{
+    InputNamesDialog dialog;
+    if(dialog.exec()==QDialog::Rejected)
+        return;
+    shipNameList.EditNameList(ui->comboBox_ship_categories->currentIndex(),
+                              &dialog.nameList, &tree.root["ship_names"]);
+    shipNameList.LoadNames(ui->comboBox_ship_categories->currentIndex(), ui->listView_ship);
+}
+
+
+void MainWindow::on_listView_ship_doubleClicked(const QModelIndex &index)
+{
+    QString newName = QInputDialog::getText(this,"New Name","name");
+    if(newName=="")
+        return;
+    shipNameList.EditName(ui->comboBox_ship_categories->currentIndex(),
+                          index.row(), newName, &tree.root["ship_names"]);
+    shipNameList.LoadNames(ui->comboBox_ship_categories->currentIndex(), ui->listView_ship);
+}

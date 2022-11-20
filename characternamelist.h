@@ -12,6 +12,7 @@
 #include <QTextStream>
 #include <vector>
 #include <helperFunctions.h>
+#include <name_list_defaults.h>
 
 #include <QDebug>
 
@@ -38,11 +39,17 @@ class CharacterNameList : public QMainWindow
 public:
     explicit CharacterNameList(QWidget *parent = nullptr);
     void Update(QListView* listView);
+    void Clear(QListView* listView, QComboBox *box, QComboBox* box2, QLineEdit* edit);
     void LoadNameList(TreeItem* treeCharacterName);
     void LoadNameCategories(QComboBox* box);
     void LoadNameSets(QComboBox* box);
     void LoadNameSetWeight(QLineEdit* edit);
     void LoadNames(int setIndex, int catIndex, QListView* listView);
+    void AddNameSet(QString name, TreeItem* treeCharacterName);
+    void AddNameCategory(QString category, int setIndex, TreeItem *treeCharacterName);
+    void EditNameList(int setIndex, int catIndex, std::vector<QString>* names, TreeItem *treeCharacterName);
+    void EditName(int setIndex, int catIndex, int nameIndex, QString name, TreeItem *treeCharacterName);
+    void EditNameSetWeight(int setIndex, int weight);
 
 private:
     CharacterNameSet GenerateCharacterNameSet(TreeItem* treeNameSet);

@@ -32,7 +32,19 @@ public:
 
     std::vector<QString> random_sequential_categories = {"random_names","sequential_name"};
 
+    std::vector<QString> misc_categories = {"weight", "names"};
+
 public:
+    bool CheckIfKeyIsCategory(QString k)
+    {
+        for(auto cat:species_name_categories) if(k==cat) return true;
+        for(auto cat:army_categories) if(k==cat) return true;
+        for(auto cat:planet_categories) if(k==cat) return true;
+        for(auto cat:ship_categories) if(k==cat) return true;
+        for(auto cat:character_set_categories) if(k==cat) return true;
+        for(auto cat:random_sequential_categories) if(k==cat) return true;
+        return false;
+    }
     TreeItem GenerateDefaultTree()
     {
         TreeItem defaultRoot;

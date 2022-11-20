@@ -11,6 +11,13 @@ void LocalKeyList::Update(QListView *listView)
     listView->setModel(keyList);
 }
 
+void LocalKeyList::Clear(QListView *listView)
+{
+    QStringList st;
+    keyList->setStringList(st);
+    listView->setModel(keyList);
+}
+
 void LocalKeyList::LoadKeys(LoadDict* dict)
 {
     QStringList list;
@@ -31,10 +38,13 @@ void LocalKeyList::CheckKey(TreeItem* root, LoadDict *dict, int depth)
         auto value = dict->keyPair.find(root->key);
         if(value == dict->keyPair.end())
         {
-            HelperFunctions::printLine(root->key,HelperFunctions::printOption::RED);
-            root->key = ConvertValueToKey(&root->key, dict);
+            QString parentKey = root->parent->key;
+            if(!nld.CheckIfKeyIsCategory(parentKey))
+            {
+                root->key = ConvertValueToKey(&root->key, dict);
+                HelperFunctions::printLine(root->key,parentKey,HelperFunctions::printOption::RED);
+            }
         }
-
         else
             HelperFunctions::printLine(value->first,value->second, HelperFunctions::printOption::CYAN);
     }
@@ -84,8 +94,6 @@ void LocalKeyList::GenerateKeys(LoadDict *dict, TreeItem* root)
     keyPrefix = keyPrefix.left(3).toUpper();
     //HelperFunctions::printLine(keyPrefix,HelperFunctions::printOption::BLUE);
     CheckKey(root,dict,0);
-    for(auto k:dict->keyPair)
-        HelperFunctions::printLine(k.first,k.second,HelperFunctions::printOption::GREEN);
 }
 
 QString LocalKeyList::ConvertValueToKey(QString *value, LoadDict *dict)

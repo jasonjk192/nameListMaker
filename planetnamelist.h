@@ -19,6 +19,7 @@ class PlanetNameList : public QMainWindow
     Q_OBJECT
 public:
     explicit PlanetNameList(QWidget *parent = nullptr);
+    void Clear(QListView* listView, QComboBox *box);
     void Update(QListView* listView);
     void LoadNameList(TreeItem* treeShipName);
     void LoadCategories(QComboBox* box);

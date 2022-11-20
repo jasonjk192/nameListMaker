@@ -10,6 +10,14 @@ void ShipNameList::Update(QListView* listView)
     listView->setModel(shipList);
 }
 
+void ShipNameList::Clear(QListView *listView, QComboBox *box)
+{
+    QStringList st;
+    shipList->setStringList(st);
+    listView->setModel(shipList);
+    box->clear();
+}
+
 void ShipNameList::LoadNameList(TreeItem* treeShipName)
 {
     shipCategoryBodyList.clear();
@@ -44,4 +52,28 @@ void ShipNameList::LoadNames(int index, QListView *listView)
         shipList->setStringList(shipCategoryBodyList[index]);
         Update(listView);
     }
+}
+
+void ShipNameList::AddCategory(QString name, TreeItem *treeShipName)
+{
+    treeShipName->InsertKey(name);
+    shipCategoryBodyList.push_back(QStringList());
+    categories.push_back(name);
+}
+
+void ShipNameList::EditNameList(int index, std::vector<QString> *names, TreeItem *treeShipName)
+{
+    QString cat = categories[index];
+    for(auto name:*names)
+    {
+        shipCategoryBodyList[index].push_back(name);
+        (*treeShipName)[cat].InsertKey(name);
+    }
+}
+
+void ShipNameList::EditName(int index, int nameIndex, QString name, TreeItem *treeShipName)
+{
+    QString cat = categories[index];
+    (*treeShipName)[cat][nameIndex].key = name;
+    shipCategoryBodyList[index][nameIndex] = name;
 }

@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_key">
      <attribute name="title">
@@ -115,6 +115,32 @@
            </sizepolicy>
           </property>
          </widget>
+         <widget class="QPushButton" name="pushButton_ship_add_category">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>40</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Category</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_ship_add_names">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>80</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Names</string>
+          </property>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -165,6 +191,32 @@
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_fleet_add_category">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>40</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Category</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_fleet_add_names">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>80</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Names</string>
           </property>
          </widget>
         </widget>
@@ -226,6 +278,45 @@
            </rect>
           </property>
          </widget>
+         <widget class="QPushButton" name="pushButton_army_add_category">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>80</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Category</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_army_add_type">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>120</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Type</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_army_add_names">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>160</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Names</string>
+          </property>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -283,12 +374,25 @@
            <rect>
             <x>0</x>
             <y>40</y>
-            <width>83</width>
+            <width>391</width>
             <height>29</height>
            </rect>
           </property>
           <property name="text">
            <string>Add Names</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_planet_add_category">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>80</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Category</string>
           </property>
          </widget>
         </widget>
@@ -347,14 +451,65 @@
            </rect>
           </property>
          </widget>
-         <widget class="QLineEdit" name="lineEdit_character_name_set_weight">
+         <widget class="QWidget" name="horizontalLayoutWidget_7">
           <property name="geometry">
            <rect>
-            <x>280</x>
+            <x>0</x>
             <y>80</y>
-            <width>113</width>
-            <height>28</height>
+            <width>391</width>
+            <height>31</height>
            </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_character_weight">
+           <item>
+            <widget class="QLabel" name="label_character_name_weight">
+             <property name="text">
+              <string>weight</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_character_name_set_weight"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QPushButton" name="pushButton_character_add_name_set">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>120</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Name Set</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_character_add_name_category">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>160</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Name Category</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="pushButton_character_add_names">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>200</y>
+            <width>391</width>
+            <height>29</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Add Names</string>
           </property>
          </widget>
         </widget>
@@ -385,8 +540,8 @@
     <addaction name="actionSave"/>
     <addaction name="actionSave_As"/>
     <addaction name="separator"/>
+    <addaction name="actionCloseNameList"/>
     <addaction name="actionExit"/>
-    <addaction name="actionExit_2"/>
    </widget>
    <widget class="QMenu" name="menuAdd">
     <property name="title">
@@ -442,12 +597,12 @@
     <string>Save As...</string>
    </property>
   </action>
-  <action name="actionExit">
+  <action name="actionCloseNameList">
    <property name="text">
     <string>Close Name List</string>
    </property>
   </action>
-  <action name="actionExit_2">
+  <action name="actionExit">
    <property name="text">
     <string>Exit</string>
    </property>

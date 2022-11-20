@@ -71,10 +71,15 @@ class ArmyNameList : public QMainWindow
 public:
     explicit ArmyNameList(QWidget *parent = nullptr);
     void Update(QListView* listView);
+    void Clear(QListView* listView, QComboBox *box, QComboBox* box2);
     void LoadNameList(TreeItem* treeArmyName);
     void LoadCategories(QComboBox* box);
     void LoadCategoryNames(QComboBox* box);
     void LoadNames(int catIndex, int typeIndex, QListView* listView);
+    void AddCategory(QString name, TreeItem* treeArmyName);
+    void AddType(QString name, int catIndex, TreeItem* treeArmyName);
+    void EditNameList(int catIndex, int typeIndex, std::vector<QString> *names, TreeItem *treeArmyName);
+    void EditName(int catIndex, int typeIndex, int nameIndex, QString name, TreeItem *treeArmyName);
 
 private:
     ArmyNameSet GenerateArmyNameSet(TreeItem* treeNameSet);

@@ -20,9 +20,13 @@ class FleetNameList : public QMainWindow
 public:
     explicit FleetNameList(QWidget *parent = nullptr);
     void Update(QListView* listView);
+    void Clear(QListView* listView, QComboBox *box);
     void LoadNameList(TreeItem* treeFleetName);
     void LoadNameCategories(QComboBox* box);
     void LoadNames(int index, QListView* listView);
+    void AddCategory(QString name, TreeItem *treeFleetName);
+    void EditNameList(int index, std::vector<QString> *names, TreeItem *treeFleetName);
+    void EditName(int index, int nameIndex, QString name, TreeItem *treeFleetName);
 
 private:
     QStringListModel* fleetList;

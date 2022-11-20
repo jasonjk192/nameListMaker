@@ -11,6 +11,16 @@ void CharacterNameList::Update(QListView *listView)
     listView->setModel(characterList);
 }
 
+void CharacterNameList::Clear(QListView *listView, QComboBox *box, QComboBox *box2, QLineEdit *edit)
+{
+    QStringList st;
+    characterList->setStringList(st);
+    listView->setModel(characterList);
+    box2->clear();
+    box->clear();
+    edit->clear();
+}
+
 void CharacterNameList::LoadNameList(TreeItem* treeCharacterName)
 {
     characterNameSetList.clear();
@@ -55,6 +65,54 @@ void CharacterNameList::LoadNames(int setIndex, int catIndex, QListView *listVie
     }
 }
 
+void CharacterNameList::AddNameSet(QString name, TreeItem* treeCharacterName)
+{
+    TreeItem* newSet = treeCharacterName->InsertKey(name);
+    newSet->InsertKey("weight");
+    (*newSet)["weight"].InsertKey("100");
+
+    NameListDefaults nld;
+    CharacterNameSet set;
+    QStringList list;
+    set.name = name;
+    for(auto cat:nld.character_set_categories)
+    {
+        set.nameSetCategories.push_back(cat);
+        set.nameList.push_back(list);
+        newSet->InsertKey(cat);
+    }
+    characterNameSetList.push_back(set);
+}
+
+void CharacterNameList::AddNameCategory(QString category, int setIndex, TreeItem *treeCharacterName)
+{
+    characterNameSetList[setIndex].nameSetCategories.push_back(category);
+    characterNameSetList[setIndex].nameList.push_back(QStringList());
+    treeCharacterName[setIndex].InsertKey(category);
+}
+
+void CharacterNameList::EditNameList(int setIndex, int catIndex, std::vector<QString> *names, TreeItem *treeCharacterName)
+{
+    QString cat = characterNameSetList[setIndex].nameSetCategories[catIndex];
+    for(auto name:*names)
+    {
+        characterNameSetList[setIndex].nameList[catIndex].push_back(name);
+        (*treeCharacterName)[setIndex][cat].InsertKey(name);
+    }
+}
+
+void CharacterNameList::EditName(int setIndex, int catIndex, int nameIndex, QString name, TreeItem *treeCharacterName)
+{
+    QString cat = characterNameSetList[setIndex].nameSetCategories[catIndex];
+    (*treeCharacterName)[setIndex][cat][nameIndex].key = name;
+    characterNameSetList[setIndex].nameList[catIndex][nameIndex] = name;
+}
+
+void CharacterNameList::EditNameSetWeight(int setIndex, int weight)
+{
+    characterNameSetList[setIndex].weight = weight;
+}
+
 CharacterNameSet CharacterNameList::GenerateCharacterNameSet(TreeItem *treeNameSet)
 {
     CharacterNameSet set;
@@ -72,8 +130,3 @@ CharacterNameSet CharacterNameList::GenerateCharacterNameSet(TreeItem *treeNameS
     }
     return set;
 }
-
-//const std::vector<QString> CharacterNameSet::nameSetCategories = {"first_names", "first_names_male", "first_names_female", "regnal_first_names_male", "regnal_first_names_female",
-//        "second_names", "regnal_second_names", "full_names_male", "full_names_female"};
-
-

@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <loaddatafiles.h>
+#include <name_list_defaults.h>
 
 #include <QDebug>
 
@@ -16,13 +17,13 @@ class LocalKeyList : public QMainWindow
 public:
     explicit LocalKeyList(QWidget *parent = nullptr);
     void Update(QListView* listView);
+    void Clear(QListView* listView);
     void LoadKeys(LoadDict* dict);
     void GenerateKeys(LoadDict* dict, TreeItem* root);
 
 private:
     QString ConvertValueToKey(QString* value, LoadDict* dict);
     void CheckKey(TreeItem* root, LoadDict *dict, int depth);
-    bool checkIfKeyIsCategory(QString k);
     bool checkIfValueIsSequential(QString* value);
 
 public:
@@ -32,6 +33,7 @@ private:
     QStringListModel* keyList;
     QString keyPrefix;
     bool debugToConsole = false;
+    NameListDefaults nld;
 
 signals:
 

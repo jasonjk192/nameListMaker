@@ -11,6 +11,15 @@ void ArmyNameList::Update(QListView *listView)
     listView->setModel(armyList);
 }
 
+void ArmyNameList::Clear(QListView *listView, QComboBox *box, QComboBox *box2)
+{
+    QStringList st;
+    armyList->setStringList(st);
+    listView->setModel(armyList);
+    box->clear();
+    box2->clear();
+}
+
 void ArmyNameList::LoadNameList(TreeItem* treeArmyName)
 {
     armyNameSetList.clear();
@@ -51,10 +60,47 @@ void ArmyNameList::LoadNames(int catIndex, int typeIndex, QListView *listView)
     }
 }
 
+void ArmyNameList::AddCategory(QString name, TreeItem *treeArmyName)
+{
+    TreeItem* treeNameSet = treeArmyName->InsertKey(name);
+    armyNameSetList.push_back(GenerateArmyNameSet(treeNameSet));
+}
+
+void ArmyNameList::AddType(QString name, int catIndex, TreeItem *treeArmyName)
+{
+    armyNameSetList[catIndex].nameTypeCategories.push_back(name);
+    armyNameSetList[catIndex].nameList.push_back(QStringList());
+    (*treeArmyName)[catIndex].InsertKey(name);
+}
+
+void ArmyNameList::EditNameList(int catIndex, int typeIndex, std::vector<QString> *names, TreeItem *treeArmyName)
+{
+    QString cat = armyNameSetList[catIndex].nameTypeCategories[typeIndex];
+    for(auto name:*names)
+    {
+        armyNameSetList[catIndex].nameList[typeIndex].push_back(name);
+        (*treeArmyName)[catIndex][cat].InsertKey(name);
+    }
+}
+
+void ArmyNameList::EditName(int catIndex, int typeIndex, int nameIndex, QString name, TreeItem *treeArmyName)
+{
+    QString cat = armyNameSetList[catIndex].nameTypeCategories[typeIndex];
+    (*treeArmyName)[catIndex][cat][nameIndex].key = name;
+    armyNameSetList[catIndex].nameList[typeIndex][nameIndex] = name;
+}
+
 ArmyNameSet ArmyNameList::GenerateArmyNameSet(TreeItem *treeNameSet)
 {
     ArmyNameSet set;
     set.armyCategoryName = treeNameSet->key;
+    if(treeNameSet->children.size()==0)
+    {
+        set.nameTypeCategories.push_back("random_names");
+        set.nameTypeCategories.push_back("sequential_name");
+        set.nameList.push_back(QStringList());
+        set.nameList.push_back(QStringList());
+    }
     for(auto nameType:treeNameSet->children)
     {
         set.nameTypeCategories.push_back(nameType->key);

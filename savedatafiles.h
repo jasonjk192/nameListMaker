@@ -14,32 +14,18 @@ class SaveDataFiles : public QMainWindow
 
 private:
     QString nameListString = "";
-    bool debugToConsole = true;
+    bool debugToConsole = false;
     NameListDefaults def;
-
-    bool checkIfKeyIsCategory(QString k)
-    {
-        if(k=="names") return true;
-        if(k=="weight") return true;
-        for(auto cat:def.species_name_categories) if(k==cat) return true;
-        for(auto cat:def.army_categories) if(k==cat) return true;
-        for(auto cat:def.planet_categories) if(k==cat) return true;
-        for(auto cat:def.ship_categories) if(k==cat) return true;
-        for(auto cat:def.character_set_categories) if(k==cat) return true;
-        for(auto cat:def.random_sequential_categories) if(k==cat) return true;
-        return false;
-    }
 
     void PruneTree(TreeItem* root)
     {
         if(root->children.size()==0)
         {
-            if(checkIfKeyIsCategory(root->key))
+            if(def.CheckIfKeyIsCategory(root->key))
             {
                 HelperFunctions::printLine(root->key,HelperFunctions::printOption::RED);
                 root->RemoveKey();
             }
-
         }
         else
         {
@@ -56,8 +42,7 @@ private:
     {
         if(root->children.size()==0)
         {
-
-            if(checkIfKeyIsCategory(root->key))
+            if(def.CheckIfKeyIsCategory(root->key) || root->children.size()>0)
             {
                 if(debugToConsole) HelperFunctions::printLine(HelperFunctions::generateSpace(depth)+root->key+" = {}",HelperFunctions::printOption::STRONG_CYAN);
                 nameListString.append(HelperFunctions::generateSpace(depth)+root->key+" = {}\r\n");

@@ -19,9 +19,13 @@ class ShipNameList : public QMainWindow
 public:
     explicit ShipNameList(QMainWindow *parent = nullptr);
     void Update(QListView* listView);
+    void Clear(QListView* listView, QComboBox *box);
     void LoadNameList(TreeItem* treeShipName);
     void LoadCategories(QComboBox* box);
     void LoadNames(int index, QListView* listView);
+    void AddCategory(QString name, TreeItem *treeShipName);
+    void EditNameList(int index, std::vector<QString> *names, TreeItem *treeShipName);
+    void EditName(int index, int nameIndex, QString name, TreeItem *treeShipName);
 
 private:
     QStringListModel* shipList;

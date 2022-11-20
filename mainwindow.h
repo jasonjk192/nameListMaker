@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QFormLayout>
 #include <QMouseEvent>
+#include <QInputDialog>
 
 #include "shipnamelist.h"
 #include "localkeylist.h"
@@ -33,6 +34,9 @@ public:
 
 private:
     void ResetTree();
+    void ResetDict();
+    void ResetNameList();
+
     void InitLocalKeyList();
     void InitShipNameList();
     void InitFleetNameList();
@@ -79,6 +83,42 @@ private slots:
 
     void on_actionToggle_Localization_Keys_triggered(bool checked);
 
+    void on_pushButton_planet_add_category_clicked();
+
+    void on_actionExit_triggered();
+
+    void on_actionCloseNameList_triggered();
+
+    void on_lineEdit_character_name_set_weight_textEdited(const QString &arg1);
+
+    void on_pushButton_character_add_name_set_clicked();
+
+    void on_pushButton_character_add_name_category_clicked();
+
+    void on_pushButton_character_add_names_clicked();
+
+    void on_listView_character_doubleClicked(const QModelIndex &index);
+
+    void on_pushButton_army_add_category_clicked();
+
+    void on_pushButton_army_add_names_clicked();
+
+    void on_pushButton_army_add_type_clicked();
+
+    void on_listView_army_doubleClicked(const QModelIndex &index);
+
+    void on_pushButton_fleet_add_category_clicked();
+
+    void on_pushButton_fleet_add_names_clicked();
+
+    void on_listView_fleet_doubleClicked(const QModelIndex &index);
+
+    void on_pushButton_ship_add_category_clicked();
+
+    void on_pushButton_ship_add_names_clicked();
+
+    void on_listView_ship_doubleClicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
     ShipNameList shipNameList;
@@ -92,5 +132,6 @@ private:
     QString nameListFileString;
     LoadTree tree;
     LoadDict dict;
+    std::vector<QString> userCategories;
 };
 #endif // MAINWINDOW_H
