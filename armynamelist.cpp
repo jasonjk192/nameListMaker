@@ -90,6 +90,35 @@ void ArmyNameList::EditName(int catIndex, int typeIndex, int nameIndex, QString 
     armyNameSetList[catIndex].nameList[typeIndex][nameIndex] = name;
 }
 
+void ArmyNameList::EditCategory(QString name, int catIndex, TreeItem *treeArmyName)
+{
+    armyNameSetList[catIndex].armyCategoryName = name;
+    (*treeArmyName)[catIndex].key = name;
+}
+
+void ArmyNameList::EditType(QString name, int catIndex, int typeIndex, TreeItem *treeArmyName)
+{
+     armyNameSetList[catIndex].nameTypeCategories[typeIndex] = name;
+    (*treeArmyName)[catIndex][typeIndex].key = name;
+}
+
+void ArmyNameList::RemoveCategory(int catIndex, TreeItem *treeArmyName)
+{
+    if(categories.size()==1)
+    {
+        HelperFunctions::printLine("WARNING: Cannot remove last category",HelperFunctions::printOption::YELLOW);
+        return;
+    }
+    armyNameSetList.erase(armyNameSetList.begin()+catIndex);
+    (*treeArmyName)[catIndex].RemoveKey();
+}
+
+void ArmyNameList::RemoveType(int catIndex, int typeIndex, TreeItem *treeArmyName)
+{
+    armyNameSetList[catIndex].nameTypeCategories.erase(armyNameSetList[catIndex].nameTypeCategories.begin()+typeIndex);
+    (*treeArmyName)[catIndex][typeIndex].RemoveKey();
+}
+
 ArmyNameSet ArmyNameList::GenerateArmyNameSet(TreeItem *treeNameSet)
 {
     ArmyNameSet set;

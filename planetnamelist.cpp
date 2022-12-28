@@ -54,3 +54,21 @@ void PlanetNameList::LoadNames(int index, QListView *listView)
         Update(listView);
     }
 }
+
+void PlanetNameList::RemoveCategory(int catIndex, TreeItem *treeShipName)
+{
+    if(categories.size()==1)
+    {
+        HelperFunctions::printLine("WARNING: Cannot remove last category",HelperFunctions::printOption::YELLOW);
+        return;
+    }
+    categories.erase(categories.begin()+catIndex);
+    planetCategoryBodyList.erase(planetCategoryBodyList.begin()+catIndex);
+    (*treeShipName)[catIndex].RemoveKey();
+}
+
+void PlanetNameList::EditCategory(QString name, int catIndex, TreeItem *treeShipName)
+{
+    categories[catIndex] = name;
+    (*treeShipName)[catIndex].key = name;
+}

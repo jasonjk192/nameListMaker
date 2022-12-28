@@ -49,7 +49,11 @@ public:
     void AddNameCategory(QString category, int setIndex, TreeItem *treeCharacterName);
     void EditNameList(int setIndex, int catIndex, std::vector<QString>* names, TreeItem *treeCharacterName);
     void EditName(int setIndex, int catIndex, int nameIndex, QString name, TreeItem *treeCharacterName);
+    void EditNameSet(QString name, int setIndex, TreeItem *treeCharacterName);
+    void EditNameCategory(QString name, int setIndex, int catIndex, TreeItem *treeCharacterName);
     void EditNameSetWeight(int setIndex, int weight);
+    void RemoveNameSet(int setIndex, TreeItem *treeCharacterName);
+    void RemoveNameCategory(int setIndex, int catIndex, TreeItem *treeCharacterName);
 
 private:
     CharacterNameSet GenerateCharacterNameSet(TreeItem* treeNameSet);
@@ -58,6 +62,11 @@ private:
     QStringListModel* characterList;
     std::vector<CharacterNameSet> characterNameSetList;
     int selectedNameSet = 0;
+    TreeItem *treeCharacterName;
+    QListView* listView_names;
+    QComboBox* comboBox_categories;
+    QComboBox* comboBox_set;
+    QLineEdit* lineEdit_weight;
 
 signals:
 

@@ -39,11 +39,12 @@ void LocalKeyList::CheckKey(TreeItem* root, LoadDict *dict, int depth)
         if(value == dict->keyPair.end())
         {
             QString parentKey = root->parent->key;
-            if(!nld.CheckIfKeyIsCategory(parentKey))
+            if(!nld->CheckIfKeyIsCategory(root->key) && !nld->IgnoreCategoryForLocalKeyGeneration(parentKey))
             {
                 root->key = ConvertValueToKey(&root->key, dict);
                 HelperFunctions::printLine(root->key,parentKey,HelperFunctions::printOption::RED);
             }
+
         }
         else
             HelperFunctions::printLine(value->first,value->second, HelperFunctions::printOption::CYAN);
@@ -87,13 +88,20 @@ void LocalKeyList::CheckKey(TreeItem* root, LoadDict *dict, int depth)
     }
 }
 
-void LocalKeyList::GenerateKeys(LoadDict *dict, TreeItem* root)
+bool LocalKeyList::GenerateKeys(LoadDict *dict, TreeItem* root, NameListDefaults* defaults)
 {
+    if(root->children.empty())
+    {
+        HelperFunctions::printLine("Tree is not initialized",HelperFunctions::printOption::RED);
+        return false;
+    }
+    nld = defaults;
     QString aliasName = (*root)["alias"].children[0]->key;
     keyPrefix = aliasName.replace("\"","");
     keyPrefix = keyPrefix.left(3).toUpper();
     //HelperFunctions::printLine(keyPrefix,HelperFunctions::printOption::BLUE);
     CheckKey(root,dict,0);
+    return true;
 }
 
 QString LocalKeyList::ConvertValueToKey(QString *value, LoadDict *dict)

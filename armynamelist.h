@@ -80,6 +80,10 @@ public:
     void AddType(QString name, int catIndex, TreeItem* treeArmyName);
     void EditNameList(int catIndex, int typeIndex, std::vector<QString> *names, TreeItem *treeArmyName);
     void EditName(int catIndex, int typeIndex, int nameIndex, QString name, TreeItem *treeArmyName);
+    void EditCategory(QString name, int catIndex, TreeItem* treeArmyName);
+    void EditType(QString name, int catIndex, int typeIndex, TreeItem* treeArmyName);
+    void RemoveCategory(int catIndex, TreeItem* treeArmyName);
+    void RemoveType(int catIndex, int typeIndex, TreeItem* treeArmyName);
 
 private:
     ArmyNameSet GenerateArmyNameSet(TreeItem* treeNameSet);

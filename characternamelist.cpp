@@ -108,9 +108,45 @@ void CharacterNameList::EditName(int setIndex, int catIndex, int nameIndex, QStr
     characterNameSetList[setIndex].nameList[catIndex][nameIndex] = name;
 }
 
+void CharacterNameList::EditNameSet(QString name, int setIndex, TreeItem *treeCharacterName)
+{
+    characterNameSetList[setIndex].name = name;
+    (*treeCharacterName)[setIndex].key = name;
+}
+
+void CharacterNameList::EditNameCategory(QString name, int setIndex, int catIndex, TreeItem *treeCharacterName)
+{
+    characterNameSetList[setIndex].nameSetCategories[catIndex] = name;
+    (*treeCharacterName)[setIndex][catIndex].key = name;
+}
+
 void CharacterNameList::EditNameSetWeight(int setIndex, int weight)
 {
     characterNameSetList[setIndex].weight = weight;
+}
+
+void CharacterNameList::RemoveNameSet(int setIndex, TreeItem *treeCharacterName)
+{
+    if(characterNameSetList.size()==1)
+    {
+        HelperFunctions::printLine("WARNING: Cannot remove last name set",HelperFunctions::printOption::YELLOW);
+        return;
+    }
+    characterNameSetList.erase(characterNameSetList.begin()+setIndex);
+    (*treeCharacterName)[setIndex].RemoveKey();
+}
+
+void CharacterNameList::RemoveNameCategory(int setIndex, int catIndex, TreeItem *treeCharacterName)
+{
+    auto set = &characterNameSetList[setIndex];
+    if(set->nameSetCategories.size()==1)
+    {
+        HelperFunctions::printLine("WARNING: Cannot remove last category",HelperFunctions::printOption::YELLOW);
+        return;
+    }
+    set->nameSetCategories.erase(set->nameSetCategories.begin()+catIndex);
+    set->nameList.erase(set->nameList.begin()+catIndex);
+    (*treeCharacterName)[setIndex][catIndex].RemoveKey();
 }
 
 CharacterNameSet CharacterNameList::GenerateCharacterNameSet(TreeItem *treeNameSet)

@@ -24,6 +24,8 @@ public:
     void LoadNameList(TreeItem* treeShipName);
     void LoadCategories(QComboBox* box);
     void LoadNames(int index, QListView* listView);
+    void RemoveCategory(int catIndex, TreeItem* treeShipName);
+    void EditCategory(QString name, int catIndex, TreeItem* treeShipName);
 
 private:
     QStringListModel* planetList;

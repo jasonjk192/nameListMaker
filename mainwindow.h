@@ -119,6 +119,26 @@ private slots:
 
     void on_listView_ship_doubleClicked(const QModelIndex &index);
 
+    void on_pushButton_character_remove_name_set_clicked();
+
+    void on_pushButton_character_edit_name_set_clicked();
+
+    void on_pushButton_character_remove_name_category_clicked();
+
+    void on_pushButton_character_edit_name_category_clicked();
+
+    void on_pushButton_planet_remove_category_clicked();
+
+    void on_pushButton_planet_edit_category_clicked();
+
+    void on_pushButton_army_remove_category_clicked();
+
+    void on_pushButton_army_edit_category_clicked();
+
+    void on_pushButton_army_remove_type_clicked();
+
+    void on_pushButton_army_edit_type_clicked();
+
 private:
     Ui::MainWindow *ui;
     ShipNameList shipNameList;
@@ -132,6 +152,6 @@ private:
     QString nameListFileString;
     LoadTree tree;
     LoadDict dict;
-    std::vector<QString> userCategories;
+    NameListDefaults nld;
 };
 #endif // MAINWINDOW_H

@@ -19,7 +19,7 @@ public:
     void Update(QListView* listView);
     void Clear(QListView* listView);
     void LoadKeys(LoadDict* dict);
-    void GenerateKeys(LoadDict* dict, TreeItem* root);
+    bool GenerateKeys(LoadDict* dict, TreeItem* root, NameListDefaults* defaults);
 
 private:
     QString ConvertValueToKey(QString* value, LoadDict* dict);
@@ -33,7 +33,7 @@ private:
     QStringListModel* keyList;
     QString keyPrefix;
     bool debugToConsole = false;
-    NameListDefaults nld;
+    NameListDefaults* nld;
 
 signals:
 
