@@ -95,7 +95,7 @@ void MainWindow::UpdateKeys(std::vector<QString> keys, TreeItem *node, QListView
 void MainWindow::InitLocalKeyList()
 {
     localKeyList.LoadKeys(&dict);
-    localKeyList.Update(ui->listView_keys);
+    localKeyList.Update(ui->listView_keys, ui->lineEdit_alias);
 }
 
 //////////////////////////////
@@ -148,7 +148,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
 void MainWindow::on_actionOpen_Name_List_triggered()
 {
-    //QString filepath_nameList = stellarisPath+"/common/name_lists/HUMAN1.txt";
     ResetTree();
 
     QString filter = tr("All files (*.*);;TXT (*.txt)");
@@ -159,12 +158,18 @@ void MainWindow::on_actionOpen_Name_List_triggered()
     {
         errorMessageBox.setText("Error loading name list at path: "+filepath_nameList);
         errorMessageBox.exec();
+        return;
     }
     if(!tree.LoadData(&nameListFileString))
     {
         errorMessageBox.setText("Error loading name list data");
         errorMessageBox.exec();
+        return;
     }
+
+    nameListFilePath = filepath_nameList;
+    localKeyList.LoadAlias(&tree.root["alias"]);
+    localKeyList.Update(ui->listView_keys, ui->lineEdit_alias);
     InitShipNameList();
     InitFleetNameList();
     InitArmyNameList();
@@ -174,7 +179,6 @@ void MainWindow::on_actionOpen_Name_List_triggered()
 
 void MainWindow::on_actionOpen_Localization_triggered()
 {
-    //QString filepath_localization = stellarisPath+"/localisation/english/name_lists/name_list_HUMAN1_l_english.yml";
     QString filter = tr("All files (*.*);;YML (*.yml)");
     QString filepath_localization = QFileDialog::getOpenFileName(this, tr("Open File"), tr(""), filter);
     if(filepath_localization.isEmpty())
@@ -183,17 +187,23 @@ void MainWindow::on_actionOpen_Localization_triggered()
     {
         errorMessageBox.setText("Error loading localization at path: "+filepath_localization);
         errorMessageBox.exec();
+        return;
     }
     if(!dict.LoadData(&localKeyFileString))
     {
         errorMessageBox.setText("Error loading localization data");
         errorMessageBox.exec();
+        return;
     }
+    localKeyFilePath = filepath_localization;
     InitLocalKeyList();
 }
 
 void MainWindow::on_actionCreate_New_Name_List_triggered()
 {
+    localKeyFilePath = "";
+    nameListFilePath = "";
+
     ResetTree();
     tree.root = nld.GenerateDefaultTree();
     InitShipNameList();
@@ -201,12 +211,49 @@ void MainWindow::on_actionCreate_New_Name_List_triggered()
     InitArmyNameList();
     InitPlanetNameList();
     InitCharacterNameList();
+
+    ui->lineEdit_alias->setText("");
 }
+
+
+void MainWindow::on_actionSave_triggered()
+{
+    if(!tree.root.children.empty())
+    {
+        if(!nameListFilePath.isEmpty())
+            SaveDataFiles::SaveNameList(&tree.root,nameListFilePath);
+        else
+            HelperFunctions::printLine("Name list was not opened", HelperFunctions::printOption::YELLOW);
+    }
+    else
+        HelperFunctions::printLine("No data is available", HelperFunctions::printOption::YELLOW);
+    if(dict.keyPair.size()>0)
+    {
+        if(localKeyFilePath.isEmpty())
+        {
+            if(!nameListFilePath.isEmpty())
+                localKeyFilePath = nameListFilePath.replace(".txt",".yml");
+            else
+                HelperFunctions::printLine("Localization was not opened", HelperFunctions::printOption::YELLOW);
+        }
+        if(!localKeyFilePath.isEmpty())
+            SaveDataFiles::SaveLocalization(&dict,localKeyFilePath);
+    }
+    else
+        HelperFunctions::printLine("No localization is available/generated", HelperFunctions::printOption::YELLOW);
+}
+
 
 void MainWindow::on_actionSave_As_triggered()
 {
     if(!tree.root.children.empty())
-        SaveDataFiles::SaveNameList(&tree.root,"");
+    {
+        QString filter = tr("All files (*.*);;TXT (*.txt)");
+        QString filepath_nameList = QFileDialog::getSaveFileName(this, tr("Save File"), tr(""), filter);
+        if(filepath_nameList.isEmpty())
+            return;
+        SaveDataFiles::SaveNameList(&tree.root,filepath_nameList);
+    }
     else
         HelperFunctions::printLine("No data is available", HelperFunctions::printOption::YELLOW);
     if(dict.keyPair.size()>0)
@@ -225,6 +272,11 @@ void MainWindow::on_actionCloseNameList_triggered()
     ResetTree();
     ResetDict();
     ResetNameList();
+
+    localKeyFilePath = "";
+    nameListFilePath = "";
+
+    ui->lineEdit_alias->setText("");
 }
 
 /// Generate menu ///
@@ -624,3 +676,17 @@ void MainWindow::on_actionName_triggered()
 {
     on_pushButton_clicked();
 }
+
+void MainWindow::on_lineEdit_alias_editingFinished()
+{
+    if(tree.root.children.empty())
+    {
+        ui->lineEdit_alias->setText("");
+        HelperFunctions::printLine("No tree found. Create a new list or load an existing one.", HelperFunctions::printOption::RED);
+        return;
+    }
+    tree.root["alias"].children[0]->key = ui->lineEdit_alias->text();
+    tree.root.key = ui->lineEdit_alias->text();
+}
+
+

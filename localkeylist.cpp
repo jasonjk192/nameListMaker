@@ -6,9 +6,10 @@ LocalKeyList::LocalKeyList(QWidget *parent)
     keyList = new QStringListModel(this);
 }
 
-void LocalKeyList::Update(QListView *listView)
+void LocalKeyList::Update(QListView *listView, QLineEdit* lineEdit)
 {
     listView->setModel(keyList);
+    lineEdit->setText(aliasText);
 }
 
 void LocalKeyList::Clear(QListView *listView)
@@ -28,6 +29,11 @@ void LocalKeyList::LoadKeys(LoadDict* dict)
         for(auto k:dict->keyPair)
             list.append(k.second);
     keyList->setStringList(list);
+}
+
+void LocalKeyList::LoadAlias(TreeItem *root)
+{
+    aliasText = root->children[0]->key.remove("\"");
 }
 
 void LocalKeyList::CheckKey(TreeItem* root, LoadDict *dict, int depth)

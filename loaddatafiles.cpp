@@ -19,18 +19,22 @@ bool LoadTree::LoadData(QString* nameListFileString)
     for(int idx=0;idx<nameListFileString->size();idx++)
     {
         QChar c = nameListFileString->at(idx);
+        // Ignore comments
         if(c == "#")
         {
             idx = nameListFileString->indexOf("\n",idx);
             continue;
         }
+        // Should be counted as a word (spaces also included)
         else if(c=='\"')
         {
             ignoreSpace = !ignoreSpace;
             word.append(c);
         }
-        else if(c.isLetterOrNumber() || c=='_' || c=='%')
+        // Only letters and numbers and a few exceptions are allowed
+        else if(c.isLetterOrNumber() || c=='_' || c=='%' || c=='\'')
             word.append(c);
+        // Spaces (Word processing occurs here)
         else if(word.length()>0 && (c==' '||c=='\t'||c=='\n'||c=='\r'||c=='\f'))
         {
             if(ignoreSpace)

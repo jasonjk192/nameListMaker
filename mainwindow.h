@@ -139,6 +139,10 @@ private slots:
 
     void on_pushButton_army_edit_type_clicked();
 
+    void on_lineEdit_alias_editingFinished();
+
+    void on_actionSave_triggered();
+
 private:
     Ui::MainWindow *ui;
     ShipNameList shipNameList;
@@ -150,6 +154,8 @@ private:
     QMessageBox errorMessageBox;
     QString localKeyFileString;
     QString nameListFileString;
+    QString localKeyFilePath;
+    QString nameListFilePath;
     LoadTree tree;
     LoadDict dict;
     NameListDefaults nld;

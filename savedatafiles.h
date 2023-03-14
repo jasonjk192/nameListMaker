@@ -2,11 +2,12 @@
 #define SAVEDATAFILES_H
 
 #include <QMainWindow>
+#include <QInputDialog>
+#include <QString>
+
 #include "loaddatafiles.h"
 #include "helperFunctions.h"
 #include "name_list_defaults.h"
-
-#include <QString>
 
 class SaveDataFiles : public QMainWindow
 {
@@ -104,7 +105,7 @@ public:
     {
         SaveDataFiles sdf;
         sdf.SaveKey(root,0);
-        QFile file("E:/db/test.txt");
+        QFile file("E:/"+fileName+".txt");
         if (file.open(QIODevice::ReadWrite))
         {
             QTextStream stream(&file);
@@ -117,7 +118,7 @@ public:
         QString localListString = "l_english:\r\n";
         for(auto k:dict->keyPair)
             localListString.append(k.first+":0 "+"\""+k.second+"\"\r\n");
-        QFile file("E:/db/local_test.yml");
+        QFile file("./"+fileName);
         if (file.open(QIODevice::ReadWrite))
         {
             QTextStream stream(&file);
